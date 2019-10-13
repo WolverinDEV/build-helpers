@@ -275,9 +275,7 @@ function cmake_build() {
     return 0
 }
 
-function check_err_exit() {
-    error_code=$?
-    [[ ${error_code} -eq 0 || "${error_code}" == "0" ]] && return 0
+function err_exit() {
     if [[ ${1} =~ __* ]]; then
         echo -e "\e[1;31mFailed to build project ${1:2}. Status code: ${error_code}"
     else
@@ -286,6 +284,12 @@ function check_err_exit() {
     [[ ${#@} -gt 1 ]] && echo "${@:2}"
     echo -e "Aborting build\e[0;39m"
     exit 1
+}
+
+function check_err_exit() {
+    error_code=$?
+    [[ ${error_code} -eq 0 || "${error_code}" == "0" ]] && return 0
+    err_exit $@
 }
 
 function pline() {
