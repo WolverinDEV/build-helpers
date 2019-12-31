@@ -5,9 +5,13 @@
 color_green='\e[92m'
 color_normal='\e[39m'
 
+build_helpers_defined=1
+
+build_out_directory="out"
+
 function generate_build_path() {
     base_path=$(realpath $1)
-    build_path="$base_path/out/${build_os_type}_${build_os_arch}/"
+    build_path="$base_path/${build_out_directory}/${build_os_type}_${build_os_arch}/"
     return 0
 }
 
@@ -24,15 +28,16 @@ function requires_rebuild() {
     fi
 
     base_path=$(realpath $1)
-    echo "Testing library build status at $1 ($base_path)"
+    build_name=$(basename $1)
+    echo "Testing library build status at $build_name ($base_path)"
 
     if [[ "$force_rebuild" == "*" ]]; then
         echo "Force rebuild for everything. Rebuilding!"
         return 1
     fi
 
-    if echo "$force_rebuild" | grep -q -E "(^|;)$1(;|$)"; then
-        echo "Force rebuild for $1 is set. Rebuilding!"
+    if echo "$force_rebuild" | grep -q -E "(^|;)$build_name(;|$)"; then
+        echo "Force rebuild for $build_name is set. Rebuilding!"
         return 1
     fi
 
@@ -87,6 +92,7 @@ function set_build_successful() {
     fi
 
     base_path=$(realpath $1)
+    build_name=$(basename $1)
     chk_file=".build_${build_os_type}_${build_os_arch}.txt"
     git_rev=$(git -C ${base_path} rev-parse HEAD)
     if [[ $? -ne 0 ]]; then
@@ -94,7 +100,7 @@ function set_build_successful() {
         return 1
     fi
     echo -en "$color_green"
-    echo -e "Setting build @$1 ($base_path) as successful for commit $git_rev$color_normal"
+    echo -e "Setting build @$build_name ($base_path) as successful for commit $git_rev$color_normal"
 
     data=()
     data+=("1") #Version
@@ -129,7 +135,7 @@ function cmake_build() {
     fi
 
     local base_path=$(realpath $1)
-    local build_path="$base_path/out/${build_os_type}_${build_os_arch}/"
+    local build_path="$base_path/${build_out_directory}/${build_os_type}_${build_os_arch}/"
     if [[ ! -d ${base_path} ]]; then
         echo "Missing target directory. CMake build failed"
         return 1
@@ -279,7 +285,7 @@ function err_exit() {
     if [[ ${1} =~ __* ]]; then
         echo -e "\e[1;31mFailed to build project ${1:2}. Status code: ${error_code}"
     else
-        echo -e "\e[1;31mFailed to build project $1 at $(realpath $1). Status code: ${error_code}"
+        echo -e "\e[1;31mFailed to build project $(basename $1) at $(realpath $1). Status code: ${error_code}"
     fi
     [[ ${#@} -gt 1 ]] && echo "${@:2}"
     echo -e "Aborting build\e[0;39m"
