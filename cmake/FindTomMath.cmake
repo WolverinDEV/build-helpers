@@ -26,30 +26,34 @@ find_path(TomMath_INCLUDE_DIR
 		HINTS ${TomMath_ROOT_DIR}/ ${TomMath_ROOT_DIR}/include/
 )
 
-find_library(TomMath_LIBRARIES_STATIC
-        NAMES tommathStatic.lib tommath.lib tommath.a libtommath.a libtommathStatic.a
-		HINTS ${TomMath_ROOT_DIR} ${TomMath_ROOT_DIR}/${BUILD_OUTPUT} ${TomMath_ROOT_DIR}/lib
-)
+if (NOT TARGET tommath::static)
+    find_library(TomMath_LIBRARIES_STATIC
+            NAMES tommathStatic.lib tommath.lib tommath.a libtommath.a libtommathStatic.a
+            HINTS ${TomMath_ROOT_DIR} ${TomMath_ROOT_DIR}/${BUILD_OUTPUT} ${TomMath_ROOT_DIR}/lib
+            )
 
-find_library(TomMath_LIBRARIES_SHARED
-        NAMES tommath.dll libtommath.so tommath.so libtommathShared.so
-		HINTS ${TomMath_ROOT_DIR} ${TomMath_ROOT_DIR}/${BUILD_OUTPUT} ${TomMath_ROOT_DIR} ${TomMath_ROOT_DIR}/lib
-)
-
-if (TomMath_LIBRARIES_STATIC)
-	add_library(tommath::static SHARED IMPORTED)
-	set_target_properties(tommath::static PROPERTIES
-		IMPORTED_LOCATION ${TomMath_LIBRARIES_STATIC}
-		INTERFACE_INCLUDE_DIRECTORIES ${TomMath_INCLUDE_DIR}
-	)
+    if (TomMath_LIBRARIES_STATIC)
+        add_library(tommath::static SHARED IMPORTED)
+        set_target_properties(tommath::static PROPERTIES
+                IMPORTED_LOCATION ${TomMath_LIBRARIES_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${TomMath_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
-if (TomMath_LIBRARIES_SHARED)
-	add_library(tommath::shared SHARED IMPORTED)
-	set_target_properties(tommath::shared PROPERTIES
-			IMPORTED_LOCATION ${TomMath_LIBRARIES_SHARED}
-			INTERFACE_INCLUDE_DIRECTORIES ${TomMath_INCLUDE_DIR}
-	)
+if (NOT TARGET tommath::shared)
+    find_library(TomMath_LIBRARIES_SHARED
+            NAMES tommath.dll libtommath.so tommath.so libtommathShared.so
+            HINTS ${TomMath_ROOT_DIR} ${TomMath_ROOT_DIR}/${BUILD_OUTPUT} ${TomMath_ROOT_DIR} ${TomMath_ROOT_DIR}/lib
+            )
+
+    if (TomMath_LIBRARIES_SHARED)
+        add_library(tommath::shared SHARED IMPORTED)
+        set_target_properties(tommath::shared PROPERTIES
+                IMPORTED_LOCATION ${TomMath_LIBRARIES_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${TomMath_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
 find_package_handle_standard_args(TomMath DEFAULT_MSG

@@ -32,31 +32,35 @@ function(resolve_unbound)
 			HINTS ${unbound_ROOT_DIR}
 	)
 
-	find_library(unbound_LIBRARIES_STATIC
-			NAMES libunbound.a unbound.a unbound.lib
-			HINTS ${unbound_ROOT_DIR} ${unbound_ROOT_DIR}/lib
-	)
-	
-	if(unbound_LIBRARIES_STATIC)
-		add_library(unbound::static SHARED IMPORTED)
-		set_target_properties(unbound::static PROPERTIES
-			IMPORTED_LOCATION ${unbound_LIBRARIES_STATIC}
-			INTERFACE_INCLUDE_DIRECTORIES ${unbound_INCLUDE_DIR}
-		)
-	endif()
+    if (NOT TARGET unbound::static)
+        find_library(unbound_LIBRARIES_STATIC
+                NAMES libunbound.a unbound.a unbound.lib
+                HINTS ${unbound_ROOT_DIR} ${unbound_ROOT_DIR}/lib
+        )
 
-	find_library(unbound_LIBRARIES_SHARED
-			NAMES unbound.dll libunbound.so unbound.so
-			HINTS ${unbound_ROOT_DIR} ${unbound_ROOT_DIR}/lib
-	)
-	
-	if(unbound_LIBRARIES_SHARED)
-		add_library(unbound::shared SHARED IMPORTED)
-		set_target_properties(unbound::shared PROPERTIES
-			IMPORTED_LOCATION ${unbound_LIBRARIES_SHARED}
-			INTERFACE_INCLUDE_DIRECTORIES ${unbound_INCLUDE_DIR}
-		)
-	endif()
+        if(unbound_LIBRARIES_STATIC)
+            add_library(unbound::static SHARED IMPORTED)
+            set_target_properties(unbound::static PROPERTIES
+                IMPORTED_LOCATION ${unbound_LIBRARIES_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${unbound_INCLUDE_DIR}
+            )
+        endif()
+    endif()
+
+    if (NOT TARGET unbound::shared)
+        find_library(unbound_LIBRARIES_SHARED
+                NAMES unbound.dll libunbound.so unbound.so
+                HINTS ${unbound_ROOT_DIR} ${unbound_ROOT_DIR}/lib
+                )
+
+        if(unbound_LIBRARIES_SHARED)
+            add_library(unbound::shared SHARED IMPORTED)
+            set_target_properties(unbound::shared PROPERTIES
+                    IMPORTED_LOCATION ${unbound_LIBRARIES_SHARED}
+                    INTERFACE_INCLUDE_DIRECTORIES ${unbound_INCLUDE_DIR}
+                    )
+        endif()
+    endif ()
 	
 	find_package_handle_standard_args(unbound DEFAULT_MSG
 			unbound_INCLUDE_DIR

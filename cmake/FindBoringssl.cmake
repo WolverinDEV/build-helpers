@@ -24,30 +24,34 @@ find_path(Boringssl_INCLUDE_DIR
         HINTS ${Boringssl_ROOT_DIR} ${Boringssl_ROOT_DIR}/include/
 )
 
-find_library(Boringssl_CRYPTO_SHARED
-        NAMES libcrypto.so
-        HINTS ${Boringssl_ROOT_DIR} ${Boringssl_ROOT_DIR}/lib
-)
+if (NOT TARGET openssl::crypto::shared)
+    find_library(Boringssl_CRYPTO_SHARED
+            NAMES libcrypto.so
+            HINTS ${Boringssl_ROOT_DIR} ${Boringssl_ROOT_DIR}/lib
+            )
 
-if (Boringssl_CRYPTO_SHARED)
-    add_library(openssl::crypto::shared SHARED IMPORTED)
-    set_target_properties(openssl::crypto::shared PROPERTIES
-            IMPORTED_LOCATION ${Boringssl_CRYPTO_SHARED}
-            INTERFACE_INCLUDE_DIRECTORIES ${Boringssl_INCLUDE_DIR}
-    )
+    if (Boringssl_CRYPTO_SHARED)
+        add_library(openssl::crypto::shared SHARED IMPORTED)
+        set_target_properties(openssl::crypto::shared PROPERTIES
+                IMPORTED_LOCATION ${Boringssl_CRYPTO_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${Boringssl_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
-find_library(Boringssl_SSL_SHARED
-        NAMES libssl.so
-        HINTS ${Boringssl_ROOT_DIR} ${Boringssl_ROOT_DIR}/lib
-)
+if (NOT TARGET openssl::ssl::shared)
+    find_library(Boringssl_SSL_SHARED
+            NAMES libssl.so
+            HINTS ${Boringssl_ROOT_DIR} ${Boringssl_ROOT_DIR}/lib
+            )
 
-if (Boringssl_SSL_SHARED)
-    add_library(openssl::ssl::shared SHARED IMPORTED)
-    set_target_properties(openssl::ssl::shared PROPERTIES
-            IMPORTED_LOCATION ${Boringssl_SSL_SHARED}
-            INTERFACE_INCLUDE_DIRECTORIES ${Boringssl_INCLUDE_DIR}
-    )
+    if (Boringssl_SSL_SHARED)
+        add_library(openssl::ssl::shared SHARED IMPORTED)
+        set_target_properties(openssl::ssl::shared PROPERTIES
+                IMPORTED_LOCATION ${Boringssl_SSL_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${Boringssl_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
 find_package_handle_standard_args(Boringssl DEFAULT_MSG

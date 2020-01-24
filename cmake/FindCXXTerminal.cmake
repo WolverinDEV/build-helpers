@@ -31,30 +31,34 @@ find_path(CXXTerminal_INCLUDE_DIR
 		HINTS ${CXXTerminal_ROOT_DIR} ${CXXTerminal_ROOT_DIR}/include/
 )
 
-find_library(CXXTerminal_LIBRARIES_STATIC
-        NAMES libCXXTerminalStatic.a
-		HINTS ${CXXTerminal_ROOT_DIR} ${CXXTerminal_ROOT_DIR}/lib
-)
+if (NOT TARGET CXXTerminal::static)
+    find_library(CXXTerminal_LIBRARIES_STATIC
+            NAMES libCXXTerminalStatic.a
+            HINTS ${CXXTerminal_ROOT_DIR} ${CXXTerminal_ROOT_DIR}/lib
+            )
 
-if (CXXTerminal_LIBRARIES_STATIC)
-	add_library(CXXTerminal::static SHARED IMPORTED)
-	set_target_properties(CXXTerminal::static PROPERTIES
-			IMPORTED_LOCATION ${CXXTerminal_LIBRARIES_STATIC}
-			INTERFACE_INCLUDE_DIRECTORIES ${CXXTerminal_INCLUDE_DIR}
-			)
+    if (CXXTerminal_LIBRARIES_STATIC)
+        add_library(CXXTerminal::static SHARED IMPORTED)
+        set_target_properties(CXXTerminal::static PROPERTIES
+                IMPORTED_LOCATION ${CXXTerminal_LIBRARIES_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${CXXTerminal_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
-find_library(CXXTerminal_LIBRARIES_SHARED
-        NAMES CXXTerminal.dll libCXXTerminal.so CXXTerminal.so
-		HINTS ${CXXTerminal_ROOT_DIR} ${CXXTerminal_ROOT_DIR}/lib
-)
+if (NOT TARGET CXXTerminal::shared)
+    find_library(CXXTerminal_LIBRARIES_SHARED
+            NAMES CXXTerminal.dll libCXXTerminal.so CXXTerminal.so
+            HINTS ${CXXTerminal_ROOT_DIR} ${CXXTerminal_ROOT_DIR}/lib
+            )
 
-if (CXXTerminal_LIBRARIES_SHARED)
-	add_library(CXXTerminal::shared SHARED IMPORTED)
-	set_target_properties(CXXTerminal::shared PROPERTIES
-			IMPORTED_LOCATION ${CXXTerminal_LIBRARIES_SHARED}
-			INTERFACE_INCLUDE_DIRECTORIES ${CXXTerminal_INCLUDE_DIR}
-	)
+    if (CXXTerminal_LIBRARIES_SHARED)
+        add_library(CXXTerminal::shared SHARED IMPORTED)
+        set_target_properties(CXXTerminal::shared PROPERTIES
+                IMPORTED_LOCATION ${CXXTerminal_LIBRARIES_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${CXXTerminal_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
 find_package_handle_standard_args(CXXTerminal DEFAULT_MSG

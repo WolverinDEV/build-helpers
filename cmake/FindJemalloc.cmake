@@ -32,18 +32,20 @@ function(resolve_Jemalloc)
 			HINTS ${Jemalloc_ROOT_DIR} ${Jemalloc_ROOT_DIR}/include/
 	)
 
-	find_library(Jemalloc_LIBRARIES_SHARED
-			NAMES libjemalloc.so jemalloc.dll
-			HINTS ${Jemalloc_ROOT_DIR} ${Jemalloc_ROOT_DIR}/lib
-	)
+    if (NOT TARGET jemalloc::shared)
+        find_library(Jemalloc_LIBRARIES_SHARED
+                NAMES libjemalloc.so jemalloc.dll
+                HINTS ${Jemalloc_ROOT_DIR} ${Jemalloc_ROOT_DIR}/lib
+        )
 
-	if(Jemalloc_LIBRARIES_SHARED)
-		add_library(jemalloc::shared SHARED IMPORTED)
-		set_target_properties(jemalloc::shared PROPERTIES
-			IMPORTED_LOCATION ${Jemalloc_LIBRARIES_SHARED}
-			INTERFACE_INCLUDE_DIRECTORIES ${Jemalloc_INCLUDE_DIR}
-		)
-	endif()
+        if(Jemalloc_LIBRARIES_SHARED)
+            add_library(jemalloc::shared SHARED IMPORTED)
+            set_target_properties(jemalloc::shared PROPERTIES
+                IMPORTED_LOCATION ${Jemalloc_LIBRARIES_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${Jemalloc_INCLUDE_DIR}
+            )
+        endif()
+    endif ()
 	
 	find_package_handle_standard_args(Jemalloc DEFAULT_MSG
 			Jemalloc_INCLUDE_DIR

@@ -31,30 +31,34 @@ find_path(TomCrypt_INCLUDE_DIR
 		HINTS ${TomCrypt_ROOT_DIR} ${TomCrypt_ROOT_DIR}/include/
 )
 
-find_library(TomCrypt_LIBRARIES_STATIC
-        NAMES tomcrypt.lib libtomcrypt.lib libtomcrypt.a
-		HINTS ${TomCrypt_ROOT_DIR} ${TomCrypt_ROOT_DIR}/lib
-)
+if (NOT TARGET tomcrypt::static)
+    find_library(TomCrypt_LIBRARIES_STATIC
+            NAMES tomcrypt.lib libtomcrypt.lib libtomcrypt.a
+            HINTS ${TomCrypt_ROOT_DIR} ${TomCrypt_ROOT_DIR}/lib
+            )
 
-find_library(TomCrypt_LIBRARIES_SHARED
-        NAMES tomcrypt.dll libtomcrypt.dll libtomcrypt.so
-		HINTS ${TomCrypt_ROOT_DIR} ${TomCrypt_ROOT_DIR}/lib
-)
-
-if (TomMath_LIBRARIES_STATIC)
-	add_library(tomcrypt::static SHARED IMPORTED)
-	set_target_properties(tomcrypt::static PROPERTIES
-			IMPORTED_LOCATION ${TomCrypt_LIBRARIES_STATIC}
-			INTERFACE_INCLUDE_DIRECTORIES ${TomCrypt_INCLUDE_DIR}
-	)
+    if (TomMath_LIBRARIES_STATIC)
+        add_library(tomcrypt::static SHARED IMPORTED)
+        set_target_properties(tomcrypt::static PROPERTIES
+                IMPORTED_LOCATION ${TomCrypt_LIBRARIES_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${TomCrypt_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
-if (TomCrypt_LIBRARIES_SHARED)
-	add_library(tomcrypt::static SHARED IMPORTED)
-	set_target_properties(tomcrypt::shared PROPERTIES
-			IMPORTED_LOCATION ${TomCrypt_LIBRARIES_SHARED}
-			INTERFACE_INCLUDE_DIRECTORIES ${TomCrypt_INCLUDE_DIR}
-	)
+if (NOT TARGET tomcrypt::shared)
+    find_library(TomCrypt_LIBRARIES_SHARED
+            NAMES tomcrypt.dll libtomcrypt.dll libtomcrypt.so
+            HINTS ${TomCrypt_ROOT_DIR} ${TomCrypt_ROOT_DIR}/lib
+            )
+
+    if (TomCrypt_LIBRARIES_SHARED)
+        add_library(tomcrypt::static SHARED IMPORTED)
+        set_target_properties(tomcrypt::shared PROPERTIES
+                IMPORTED_LOCATION ${TomCrypt_LIBRARIES_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${TomCrypt_INCLUDE_DIR}
+                )
+    endif ()
 endif ()
 
 find_package_handle_standard_args(TomCrypt DEFAULT_MSG

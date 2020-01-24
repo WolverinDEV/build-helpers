@@ -32,31 +32,35 @@ function(resolve_opus)
 			HINTS ${opus_ROOT_DIR} ${opus_ROOT_DIR}/include/
 	)
 
-	find_library(opus_LIBRARIES_STATIC
-			NAMES libopus.a opus.a opus.lib
-			HINTS ${opus_ROOT_DIR} ${opus_ROOT_DIR}/lib
-	)
-	
-	if(opus_LIBRARIES_STATIC)
-		add_library(opus::static SHARED IMPORTED)
-		set_target_properties(opus::static PROPERTIES
-			IMPORTED_LOCATION ${opus_LIBRARIES_STATIC}
-			INTERFACE_INCLUDE_DIRECTORIES ${opus_INCLUDE_DIR}
-		)
-	endif()
+    if (NOT TARGET opus::static)
+        find_library(opus_LIBRARIES_STATIC
+                NAMES libopus.a opus.a opus.lib
+                HINTS ${opus_ROOT_DIR} ${opus_ROOT_DIR}/lib
+                )
 
-	find_library(opus_LIBRARIES_SHARED
-			NAMES opus.dll libopus.so opus.so
-			HINTS ${opus_ROOT_DIR} ${opus_ROOT_DIR}/lib
-	)
-	
-	if(opus_LIBRARIES_SHARED)
-		add_library(opus::shared SHARED IMPORTED)
-		set_target_properties(opus::shared PROPERTIES
-			IMPORTED_LOCATION ${opus_LIBRARIES_SHARED}
-			INTERFACE_INCLUDE_DIRECTORIES ${opus_INCLUDE_DIR}
-		)
-	endif()
+        if(opus_LIBRARIES_STATIC)
+            add_library(opus::static SHARED IMPORTED)
+            set_target_properties(opus::static PROPERTIES
+                    IMPORTED_LOCATION ${opus_LIBRARIES_STATIC}
+                    INTERFACE_INCLUDE_DIRECTORIES ${opus_INCLUDE_DIR}
+                    )
+        endif()
+    endif ()
+
+    if (NOT TARGET opus::shared)
+        find_library(opus_LIBRARIES_SHARED
+                NAMES opus.dll libopus.so opus.so
+                HINTS ${opus_ROOT_DIR} ${opus_ROOT_DIR}/lib
+                )
+
+        if(opus_LIBRARIES_SHARED)
+            add_library(opus::shared SHARED IMPORTED)
+            set_target_properties(opus::shared PROPERTIES
+                    IMPORTED_LOCATION ${opus_LIBRARIES_SHARED}
+                    INTERFACE_INCLUDE_DIRECTORIES ${opus_INCLUDE_DIR}
+                    )
+        endif()
+    endif ()
 	
 	find_package_handle_standard_args(opus DEFAULT_MSG
 			opus_INCLUDE_DIR

@@ -32,35 +32,40 @@ find_path(ThreadPool_INCLUDE_DIR
 		HINTS ${ThreadPool_ROOT_DIR} ${ThreadPool_ROOT_DIR}/include/
 )
 
-find_library(ThreadPool_LIBRARIES_STATIC
-        NAMES ThreadPoolStatic.lib ThreadPoolStatic.a libThreadPoolStatic.a
-		HINTS ${ThreadPool_ROOT_DIR} ${ThreadPool_ROOT_DIR}/lib
-)
+if (NOT TARGET threadpool::static)
+    find_library(ThreadPool_LIBRARIES_STATIC
+            NAMES ThreadPoolStatic.lib ThreadPoolStatic.a libThreadPoolStatic.a
+            HINTS ${ThreadPool_ROOT_DIR} ${ThreadPool_ROOT_DIR}/lib
+            )
 
-find_library(ThreadPool_LIBRARIES_SHARED
-        NAMES ThreadPool.dll ThreadPool.so
-		HINTS ${ThreadPool_ROOT_DIR} ${ThreadPool_ROOT_DIR}/lib
-)
+    if (TomMath_LIBRARIES_STATIC)
+        add_library(threadpool::static SHARED IMPORTED)
+        set_target_properties(threadpool::static PROPERTIES
+                IMPORTED_LOCATION ${ThreadPool_LIBRARIES_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${ThreadPool_INCLUDE_DIR}
+                )
+    endif ()
+endif ()
+
+if (NOT TARGET threadpool::shared)
+    find_library(ThreadPool_LIBRARIES_SHARED
+            NAMES ThreadPool.dll ThreadPool.so
+            HINTS ${ThreadPool_ROOT_DIR} ${ThreadPool_ROOT_DIR}/lib
+            )
+
+    if (ThreadPool_LIBRARIES_SHARED)
+        add_library(threadpool::static SHARED IMPORTED)
+        set_target_properties(threadpool::shared PROPERTIES
+                IMPORTED_LOCATION ${ThreadPool_LIBRARIES_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${ThreadPool_INCLUDE_DIR}
+                )
+    endif ()
+endif ()
 
 find_package_handle_standard_args(ThreadPool DEFAULT_MSG
         ThreadPool_INCLUDE_DIR
 )
 
-if (TomMath_LIBRARIES_STATIC)
-	add_library(threadpool::static SHARED IMPORTED)
-	set_target_properties(threadpool::static PROPERTIES
-			IMPORTED_LOCATION ${ThreadPool_LIBRARIES_STATIC}
-			INTERFACE_INCLUDE_DIRECTORIES ${ThreadPool_INCLUDE_DIR}
-			)
-endif ()
-
-if (ThreadPool_LIBRARIES_SHARED)
-	add_library(threadpool::static SHARED IMPORTED)
-	set_target_properties(threadpool::shared PROPERTIES
-			IMPORTED_LOCATION ${ThreadPool_LIBRARIES_SHARED}
-			INTERFACE_INCLUDE_DIRECTORIES ${ThreadPool_INCLUDE_DIR}
-	)
-endif ()
 
 mark_as_advanced(
         ThreadPool_ROOT_DIR
