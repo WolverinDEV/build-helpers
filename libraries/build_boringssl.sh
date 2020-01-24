@@ -43,7 +43,7 @@ fi
 generate_build_path "${library_path}"
 if [[ -d ${build_path} ]]; then
     echo "Removing old build directory"
-    #rm -r ${build_path}
+    rm -r ${build_path}
 fi
 mkdir -p ${build_path}
 check_err_exit ${library_path} "Failed to create build directory"
@@ -56,9 +56,9 @@ if [[ ${build_os_type} == "linux" ]]; then
         T32="-DCMAKE_TOOLCHAIN_FILE=../util/32-bit-toolchain.cmake"
     fi
 
-    #cmake ../../ -DOPENSSL_NO_ASM=ON -DCMAKE_CXX_FLAGS="-fPIC -Wno-error=format= -Wno-error=format-extra-args -Wno-error=misleading-indentation -Wno-error=maybe-uninitialized ${CXX_FLAGS}" -DBUILD_SHARED_LIBS=ON -DCMAKE_C_FLAGS="${C_FLAGS} -fPIC -Wno-error=misleading-indentation -Wno-error=maybe-uninitialized" -DCMAKE_BUILD_TYPE=Release ${CMAKE_OPTIONS} -DCMAKE_VERBOSE_MAKEFILE=1 ${T32}
+    cmake ../../ -DOPENSSL_NO_ASM=ON -DCMAKE_CXX_FLAGS="-fPIC -Wno-error=format= -Wno-error=format-extra-args -Wno-error=misleading-indentation -Wno-error=maybe-uninitialized ${CXX_FLAGS}" -DBUILD_SHARED_LIBS=ON -DCMAKE_C_FLAGS="${C_FLAGS} -fPIC -Wno-error=misleading-indentation -Wno-error=maybe-uninitialized" -DCMAKE_BUILD_TYPE=Release ${CMAKE_OPTIONS} -DCMAKE_VERBOSE_MAKEFILE=1 ${T32}
     check_err_exit ${library_path} "Failed to execute cmake!"
-    #make ${CMAKE_MAKE_OPTIONS}
+    make ${CMAKE_MAKE_OPTIONS}
     check_err_exit ${library_path} "Failed to build!"
 
     # Generate lib folder
