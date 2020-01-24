@@ -22,14 +22,6 @@ if [[ ${build_os_type} == "linux" ]]; then
 
     cd ${library_path}
     [[ $? -ne 0 ]] && exit 1
-    [[ -d lib ]] && rm -r lib
-    [[ $? -ne 0 ]] && exit 2
-
-    mkdir lib && cd lib || exit 2
-    ln -s ../build/ssl/libssl.so .
-    ln -s ../build/crypto/libcrypto.so .
-    ln -s ../include/ .
-    cd ..
 
     cat include/openssl/opensslv.h | grep "OPENSSL_VERSION_NUMBER" &> /dev/null
     if [[ $? -ne 0 ]]; then
