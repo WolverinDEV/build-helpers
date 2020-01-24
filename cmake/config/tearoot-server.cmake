@@ -1,6 +1,6 @@
 if (NOT BUILD_OS_TYPE OR NOT BUILD_OS_ARCH)
-    if (ENV{build_os_type} AND ENV{build_os_arch})
-        set(BUILD_OS_TYPE "$ENV{BUILD_OS_TYPE}")
+    if (DEFINED ENV{build_os_type} AND DEFINED ENV{build_os_arch})
+        set(BUILD_OS_TYPE "$ENV{build_os_type}")
         set(BUILD_OS_ARCH "$ENV{build_os_arch}")
     elseif (WIN32)
         set(BUILD_OS_TYPE "win32")
