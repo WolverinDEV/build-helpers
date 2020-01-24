@@ -31,15 +31,35 @@ find_path(DataPipes_INCLUDE_DIR
         HINTS ${DataPipes_ROOT_DIR}/include/
 )
 
-find_library(DataPipes_LIBRARIES_STATIC
-        NAMES DataPipes.lib libDataPipes.a
-        HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
-)
+if (NOT TARGET DataPipes::static)
+    find_library(DataPipes_LIBRARIES_STATIC
+            NAMES DataPipes.lib libDataPipes.a
+            HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
+            )
 
-find_library(DataPipes_LIBRARIES_SHARED
-        NAMES DataPipes.dll libDataPipes.so
-		HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
-)
+    if(DataPipes_LIBRARIES_STATIC)
+        add_library(DataPipes::static STATIC IMPORTED)
+        set_target_properties(DataPipes::static PROPERTIES
+                IMPORTED_LOCATION ${DataPipes_LIBRARIES_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
+                )
+    endif()
+endif ()
+
+if (NOT TARGET DataPipes::shared)
+    find_library(DataPipes_LIBRARIES_SHARED
+            NAMES DataPipes.dll libDataPipes.so
+            HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
+            )
+
+    if(DataPipes_LIBRARIES_SHARED)
+        add_library(DataPipes::shared SHARED IMPORTED)
+        set_target_properties(DataPipes::shared PROPERTIES
+                IMPORTED_LOCATION ${DataPipes_LIBRARIES_SHARED}
+                INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
+                )
+    endif()
+endif ()
 
 find_package_handle_standard_args(DataPipes DEFAULT_MSG
         DataPipes_INCLUDE_DIR
