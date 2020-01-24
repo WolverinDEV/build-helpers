@@ -28,7 +28,7 @@ else()
 	SET(Libevent_DIR "${LIBRARY_PATH}/libevent/${BUILD_OUTPUT}/lib/cmake/libevent/")
 endif()
 SET(opus_ROOT_DIR "${LIBRARY_PATH}/opus/${BUILD_OUTPUT}")
-SET(breakpad_ROOT_DIR "${LIBRARY_PATH}/breakpad/${BUILD_OUTPUT}")
+SET(Breakpad_ROOT_DIR "${LIBRARY_PATH}/breakpad/${BUILD_OUTPUT}")
 
 set(spdlog_DIR "${LIBRARY_PATH}/spdlog/${BUILD_OUTPUT}/lib/spdlog/cmake/")
 set(Libevent_DIR "${LIBRARY_PATH}/event/${BUILD_OUTPUT}/lib/libevent/")
