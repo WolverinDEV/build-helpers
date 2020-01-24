@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 [[ -z "${build_helper_file}" ]] && {
-	echo "Missing build helper file. Please define \"build_helper_file\""
-	exit 1
+    echo "Missing build helper file. Please define \"build_helper_file\""
+    exit 1
 }
 source ${build_helper_file}
 [[ $build_helpers_defined -ne 1 ]] && {
@@ -16,11 +16,12 @@ if [[ ! ${build_os_type} == "linux" ]]; then
     exit 1
 fi
 
-requires_rebuild ${library_path}
+requires_rebuild "${library_path}"
 [[ $? -eq 0 ]] && exit 0
 
-cd ${library_path}
+cd ${library_path} || { echo "failed to enter library path"; exit 1; }
 git clone https://chromium.googlesource.com/linux-syscall-support src/third_party/lss
+cd .. || { echo "failed to exit library path"; exit 1; }
 
 generate_build_path "${library_path}"
 if [[ -d ${build_path} ]]; then
@@ -38,8 +39,8 @@ make CXXFLAGS="-std=c++11 -I../../boringssl/include/ ${CXX_FLAGS} -static-libgcc
 check_err_exit ${library_path} "Failed to build"
 make install
 check_err_exit ${library_path} "Failed to install"
-cd ../..
+cd ../../../
 
 # cmake_build ${library_path} -DCMAKE_C_FLAGS="-fPIC -I../../boringssl/include/" -DEVENT__DISABLE_TESTS=ON -DEVENT__DISABLE_OPENSSL=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo
 # check_err_exit ${library_path} "Failed to build libevent!"
-set_build_successful ${library_path}
+set_build_successful "${library_path}"

@@ -19,11 +19,6 @@
 include(tearoot-helper)
 include(FindPackageHandleStandardArgs)
 
-find_path(Boringssl_ROOT_DIR
-        NAMES include/openssl/opensslv.h
-        HINTS ${Boringssl_ROOT_DIR}
-)
-
 find_path(Boringssl_INCLUDE_DIR
         NAMES openssl/opensslv.h
         HINTS ${Boringssl_ROOT_DIR} ${Boringssl_ROOT_DIR}/include/

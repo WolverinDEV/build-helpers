@@ -11,7 +11,7 @@ if(NOT LIBRARY_PATH OR LIBRARY_PATH STREQUAL "")
 endif()
 
 include(tearoot-helper)
-SET(Boringssl_ROOT_DIR "${LIBRARY_PATH}/boringssl/")
+SET(Boringssl_ROOT_DIR "${LIBRARY_PATH}/boringssl/lib/")
 SET(TomMath_ROOT_DIR "${LIBRARY_PATH}/tommath/${BUILD_OUTPUT}")
 SET(TomCrypt_ROOT_DIR "${LIBRARY_PATH}/tomcrypt/${BUILD_OUTPUT}")
 SET(DataPipes_ROOT_DIR "${LIBRARY_PATH}/DataPipes/${BUILD_OUTPUT}")

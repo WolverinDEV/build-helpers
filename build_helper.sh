@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Basic functions required for library building
 # Enforce library building with force_rebuild="library-a;library-b;..."
+# Use force_rebuild="*" to rebuild everything
 
 color_green='\e[92m'
 color_normal='\e[39m'
