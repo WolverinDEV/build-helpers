@@ -20,6 +20,6 @@ requires_rebuild ${library_path}
 
 _fpic=""
 [[ ${build_os_type} == "linux" ]] && _fpic="-fPIC"
-cmake_build ${library_path} -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_FLAGS="${_fpic}" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_LIBEVENT=ON -DNO_EMBETTED_LIBEVENT=ON -DLibevent_DIR="`pwd`/${libevent_path}/out/${build_os_type}_${build_os_arch}/"
+cmake_build ${library_path} -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_CXX_FLAGS="${_fpic}" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DENABLE_LIBEVENT=ON -DNO_EMBETTED_LIBEVENT=ON -DLibevent_DIR="`pwd`/${libevent_path}/out/${build_os_type}_${build_os_arch}/" -DLIBEVENT_STATIC_LINK=ON
 check_err_exit ${library_path} "Failed to build CXXTerminal!"
 set_build_successful ${library_path}
