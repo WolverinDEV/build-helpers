@@ -81,7 +81,7 @@ else()
 endif()
 
 find_package_handle_standard_args(breakpad DEFAULT_MSG
-        breakpad_INCLUDE_DIR
+        Breakpad_INCLUDE_DIR
 )
 
 mark_as_advanced(
