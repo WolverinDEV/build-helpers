@@ -27,7 +27,7 @@ list(APPEND CMAKE_MODULE_PATH "${LIBRARY_PATH}/protobuf/${BUILD_OUTPUT}/lib/cmak
 if(BUILD_OS_TYPE STREQUAL "win32")
 	SET(Libevent_DIR "${LIBRARY_PATH}/event/${BUILD_OUTPUT}/cmake")
 else()
-	SET(Libevent_DIR "${LIBRARY_PATH}/event/${BUILD_OUTPUT}/lib/cmake/libevent/")
+	SET(Libevent_DIR "${LIBRARY_PATH}/event/${BUILD_OUTPUT}/")
 endif()
 SET(opus_ROOT_DIR "${LIBRARY_PATH}/opus/${BUILD_OUTPUT}")
 SET(Breakpad_ROOT_DIR "${LIBRARY_PATH}/breakpad/${BUILD_OUTPUT}")
