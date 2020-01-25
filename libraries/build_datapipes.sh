@@ -43,6 +43,6 @@ fi
 _cxx_options=""
 [[ ${build_os_type} != "win32" ]] && _cxx_options="-fPIC -static-libgcc -static-libstdc++"
 [[ ${build_os_type} == "win32" ]] && _cxx_options="-DWIN32"
-cmake_build ${library_path} -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED=ON -DCrypto_ROOT_DIR="`pwd`/boringssl/" -DCRYPTO_TYPE="boringssl" -DCMAKE_CXX_FLAGS="${_cxx_options}" -DBUILD_TESTS=OFF -DBUILD_WEBRTC=${_datapipes_webrtc} -DMSVC_RUNTIME=static
+cmake_build ${library_path} -DCMAKE_BUILD_TYPE=Debug -DBUILD_SHARED=ON -DCrypto_ROOT_DIR="`pwd`/boringssl/lib" -DCRYPTO_TYPE="boringssl" -DCMAKE_CXX_FLAGS="${_cxx_options}" -DBUILD_TESTS=OFF -DBUILD_WEBRTC=${_datapipes_webrtc} -DMSVC_RUNTIME=static
 check_err_exit ${library_path} "Failed to build DataPipes!"
 set_build_successful ${library_path}

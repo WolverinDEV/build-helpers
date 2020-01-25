@@ -63,12 +63,17 @@ if [[ ${build_os_type} == "linux" ]]; then
     cd lib; check_err_exit ${library_path} "Failed to enter lib dir"
     [[ -L libcrypto.so ]] && { echo "Removing old crypto link"; rm libcrypto.so; check_err_exit ${library_path} "Failed to remove old crypt link"; }
     [[ -L libssl.so ]] && { echo "Removing old ssl link"; rm libssl.so; check_err_exit ${library_path} "Failed to remove old ssl link"; }
+    [[ -L include ]] && { echo "Removing old include link"; rm include; check_err_exit ${library_path} "Failed to remove old include link"; }
 
     ln -s ${build_path}/ssl/libssl.so .
     check_err_exit ${library_path} "Failed to create ssl link";
 
     ln -s ${build_path}/crypto/libcrypto.so .
     check_err_exit ${library_path} "Failed to create crypto link";
+
+    ln -s ../include/ .
+    check_err_exit ${library_path} "Failed to link include dir";
+
     cd ../../
 elif [[ ${build_os_type} == "win32" ]]; then
     cmake ../../ -G"Visual Studio 14 2015 Win64" -DOPENSSL_NO_ASM=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=. -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
