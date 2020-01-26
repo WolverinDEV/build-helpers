@@ -10,6 +10,8 @@ if(NOT LIBRARY_PATH OR LIBRARY_PATH STREQUAL "")
 	message(FATAL_ERROR "Missing library path")
 endif()
 
+message("TeaClient config")
+
 include(tearoot-helper)
 SET(TomMath_ROOT_DIR "${LIBRARY_PATH}/tommath/${BUILD_OUTPUT}")
 SET(TomCrypt_ROOT_DIR "${LIBRARY_PATH}/tomcrypt/${BUILD_OUTPUT}")
@@ -30,4 +32,7 @@ SET(breakpad_ROOT_DIR "${LIBRARY_PATH}/breakpad/${BUILD_OUTPUT}")
 SET(unbound_ROOT_DIR "${LIBRARY_PATH}/unbound/${BUILD_OUTPUT}")
 SET(TeaSpeak_SharedLib_ROOT_DIR "${LIBRARY_PATH}/../shared/")
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${LIBRARY_PATH}/spdlog/${BUILD_OUTPUT}")
+
+set(spdlog_DIR "${LIBRARY_PATH}/spdlog/${BUILD_OUTPUT}/lib/spdlog/cmake/")
+list(APPEND CMAKE_MODULE_PATH "${LIBRARY_PATH}/spdlog/${BUILD_OUTPUT}")
+message("SPDLog dir: ${spdlog_DIR}")
