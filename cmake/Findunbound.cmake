@@ -28,9 +28,10 @@ function(resolve_unbound)
 	)
 
 	find_path(unbound_INCLUDE_DIR
-			NAMES include/unbound.h include/unbound-event.h
-			HINTS ${unbound_ROOT_DIR}
+			NAMES unbound.h unbound-event.h
+			HINTS ${unbound_ROOT_DIR}/include/ ${unbound_ROOT_DIR}
 	)
+    message("Unbound include directory: ${unbound_INCLUDE_DIR}")
 
     if (NOT TARGET unbound::static)
         find_library(unbound_LIBRARIES_STATIC
@@ -39,10 +40,10 @@ function(resolve_unbound)
         )
 
         if(unbound_LIBRARIES_STATIC)
-            add_library(unbound::static SHARED IMPORTED)
+            add_library(unbound::static STATIC IMPORTED)
             set_target_properties(unbound::static PROPERTIES
-                IMPORTED_LOCATION ${unbound_LIBRARIES_STATIC}
-                INTERFACE_INCLUDE_DIRECTORIES ${unbound_INCLUDE_DIR}
+                    IMPORTED_LOCATION ${unbound_LIBRARIES_STATIC}
+                    INTERFACE_INCLUDE_DIRECTORIES ${unbound_INCLUDE_DIR}
             )
         endif()
     endif()
@@ -58,7 +59,7 @@ function(resolve_unbound)
             set_target_properties(unbound::shared PROPERTIES
                     IMPORTED_LOCATION ${unbound_LIBRARIES_SHARED}
                     INTERFACE_INCLUDE_DIRECTORIES ${unbound_INCLUDE_DIR}
-                    )
+            )
         endif()
     endif ()
 	
