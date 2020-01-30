@@ -8,11 +8,13 @@ color_normal='\e[39m'
 
 build_helpers_defined=1
 
-build_out_directory="out"
+build_directory="_build"
+install_directory="out"
 
+#FIXME: Use real build path here, but for legacy reasons re're using the install path
 function generate_build_path() {
     base_path=$(realpath $1)
-    build_path="$base_path/${build_out_directory}/${build_os_type}_${build_os_arch}/"
+    build_path="$base_path/${install_directory}/${build_os_type}_${build_os_arch}/"
     return 0
 }
 
@@ -136,7 +138,8 @@ function cmake_build() {
     fi
 
     local base_path=$(realpath $1)
-    local build_path="$base_path/${build_out_directory}/${build_os_type}_${build_os_arch}/"
+    local build_path="$base_path/${build_directory}/${build_os_type}_${build_os_arch}/"
+    local install_path="$base_path/${install_directory}/${build_os_type}_${build_os_arch}/"
     if [[ ! -d ${base_path} ]]; then
         echo "Missing target directory. CMake build failed"
         return 1
@@ -184,7 +187,7 @@ function cmake_build() {
 
     #TODO: May add a warning?
     #If given override the install prefix!
-    final_definitions["CMAKE_INSTALL_PREFIX"]="$build_path"
+    final_definitions["CMAKE_INSTALL_PREFIX"]="$install_path"
 
     #Apply general env values
     #C_FLAGS; CXX_FLAGS
@@ -265,6 +268,12 @@ function cmake_build() {
             return 1
         fi
     fi
+    if [[ -d "${install_path}" ]]; then
+        echo "Deleting old install dir"
+        rm -r "${install_path}"
+        [[ $? -ne 0 ]] && { echo "Failed to remove old install dir"; exit 1; }
+    fi
+
     [[ ! -z "${_run_before_install}" ]] && {
         eval "${_run_before_install}"
         check_err_exit $1 "Failed to execute preinstall command"
