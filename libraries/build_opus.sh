@@ -25,7 +25,8 @@ _fpic=""
 _cflags=""
 [[ ${build_os_type} == "win32" ]] && _cflags="/arch:SSE"
 
-cmake_build ${library_path} -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS="${_fpic} ${_cflags}" -DOPUS_X86_PRESUME_AVX=OFF -DOPUS_X86_PRESUME_SSE4_1=OFF
+# TODO: Patch the CMake file so that only the AVX & SEE4.1 files get -mavx. Else the optimizer will mess stuff up because it thinks its better to use "avx" instructions
+cmake_build ${library_path} -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_FLAGS="${_fpic} ${_cflags}" -DOPUS_X86_PRESUME_AVX=OFF -DOPUS_X86_PRESUME_SSE4_1=OFF -DOPUS_X86_MAY_HAVE_SSE4_1=OFF -DOPUS_X86_PRESUME_AVX=OFF
 check_err_exit ${library_path} "Failed to build opus!"
 set_build_successful ${library_path}
 #
