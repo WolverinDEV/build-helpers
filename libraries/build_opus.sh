@@ -20,7 +20,7 @@ function fix_avx() {
 
     # Linux
     sed -i "s/-mavx //g" CMakeFiles/opus.dir/flags.make
-    sed -i "s/-msse4.1 //g" CMakeFiles/opus.dir/flags.make
+#    sed -i "s/-msse4.1 //g" CMakeFiles/opus.dir/flags.make
     return 0
 }
 _run_before_build="fix_avx"
