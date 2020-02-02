@@ -13,12 +13,17 @@ source ${build_helper_file}
 requires_rebuild ${library_path}
 [[ $? -eq 0 ]] && exit 0
 
-function win_fix_avx() {
-    echo "Fixing WIN32 AVX parameters"
+function fix_avx() {
+    echo "Fixing AVX parameters"
+    # Windows
     sed -i 's/AdvancedVectorExtensions/NoExtensions/g' *.vcxproj
+
+    # Linux
+    sed -i "s/-mavx //g" CMakeFiles/opus.dir/flags.make
+    sed -i "s/-msse4.1 //g" CMakeFiles/opus.dir/flags.make
     return 0
 }
-_run_before_build="win_fix_avx"
+_run_before_build="fix_avx"
 
 _fpic=""
 [[ ${build_os_type} == "linux" ]] && _fpic="-fPIC"
