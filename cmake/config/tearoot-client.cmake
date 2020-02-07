@@ -30,6 +30,7 @@ SET(fvad_ROOT_DIR "${LIBRARY_PATH}/libfvad/${BUILD_OUTPUT}")
 SET(opus_ROOT_DIR "${LIBRARY_PATH}/opus/${BUILD_OUTPUT}")
 SET(breakpad_ROOT_DIR "${LIBRARY_PATH}/breakpad/${BUILD_OUTPUT}")
 SET(unbound_ROOT_DIR "${LIBRARY_PATH}/unbound/${BUILD_OUTPUT}")
+SET(soundio_ROOT_DIR "${LIBRARY_PATH}/soundio/${BUILD_OUTPUT}")
 SET(TeaSpeak_SharedLib_ROOT_DIR "${LIBRARY_PATH}/../shared/")
 
 
