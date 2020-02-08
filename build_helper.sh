@@ -203,7 +203,8 @@ function cmake_build() {
     [[ ! -z ${definition_string} ]] && definition_string=${definition_string:1}
 
     local _cmake_generator=""
-    [[ "${build_os_type}" == "win32" ]] && _cmake_generator=" -G\"Visual Studio 15 2017 Win64\""
+    [[ -n "${build_cmake_generator}" ]] && _cmake_generator="${build_cmake_generator}"
+    [[ -z "${_cmake_generator}" && "${build_os_type}" == "win32" ]] && _cmake_generator=" -G\"Visual Studio 15 2017 Win64\""
     local cmake_command="cmake $base_path$base_path_suffix ${_cmake_generator} ${final_parms[*]} ${definition_string} ${CMAKE_OPTIONS}"
 
     local origin_directory=$(pwd)
