@@ -21,6 +21,7 @@
 include(tearoot-helper)
 include(FindPackageHandleStandardArgs)
 
+message("Tommath root dir: ${TomMath_ROOT_DIR}")
 find_path(TomMath_INCLUDE_DIR
         NAMES tommath.h tommath_private.h
 		HINTS ${TomMath_ROOT_DIR}/ ${TomMath_ROOT_DIR}/include/
@@ -33,7 +34,7 @@ if (NOT TARGET tommath::static)
             )
 
     if (TomMath_LIBRARIES_STATIC)
-        add_library(tommath::static SHARED IMPORTED)
+        add_library(tommath::static STATIC IMPORTED)
         set_target_properties(tommath::static PROPERTIES
                 IMPORTED_LOCATION ${TomMath_LIBRARIES_STATIC}
                 INTERFACE_INCLUDE_DIRECTORIES ${TomMath_INCLUDE_DIR}

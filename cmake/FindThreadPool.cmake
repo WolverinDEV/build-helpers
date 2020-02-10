@@ -22,7 +22,7 @@ include(tearoot-helper)
 include(FindPackageHandleStandardArgs)
 
 find_path(ThreadPool_ROOT_DIR
-        NAMES include/ThreadPool.h CMakeLists.txt
+        NAMES include/ThreadPool/ThreadPool.h
 		HINTS ${ThreadPool_ROOT_DIR} ${ThreadPool_ROOT_DIR}/${BUILD_OUTPUT}
 )
 
@@ -38,7 +38,7 @@ if (NOT TARGET threadpool::static)
             HINTS ${ThreadPool_ROOT_DIR} ${ThreadPool_ROOT_DIR}/lib
             )
 
-    if (TomMath_LIBRARIES_STATIC)
+    if (ThreadPool_LIBRARIES_STATIC)
         add_library(threadpool::static STATIC IMPORTED)
         set_target_properties(threadpool::static PROPERTIES
                 IMPORTED_LOCATION ${ThreadPool_LIBRARIES_STATIC}
