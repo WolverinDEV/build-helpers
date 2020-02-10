@@ -39,7 +39,7 @@ if (NOT TARGET threadpool::static)
             )
 
     if (TomMath_LIBRARIES_STATIC)
-        add_library(threadpool::static SHARED IMPORTED)
+        add_library(threadpool::static STATIC IMPORTED)
         set_target_properties(threadpool::static PROPERTIES
                 IMPORTED_LOCATION ${ThreadPool_LIBRARIES_STATIC}
                 INTERFACE_INCLUDE_DIRECTORIES ${ThreadPool_INCLUDE_DIR}
