@@ -236,9 +236,9 @@ function cmake_build() {
         _config=""
         [[ ! -z "${final_definitions["CMAKE_BUILD_TYPE"]}" ]] && _config="--config ${final_definitions["CMAKE_BUILD_TYPE"]}"
 
-        make_command="cmake --build . -j8 ${_config}"
-        make_command_target="cmake --build . --target %target% -j8 ${_config}"
-        make_install_command="cmake --build . ${_config} --target install -j8"
+        make_command="cmake --build . -j32 ${_config}"
+        make_command_target="cmake --build . --target %target% -j32 ${_config}"
+        make_install_command="cmake --build . ${_config} --target install"
     else
         echo "OS type unknown"
         return 1

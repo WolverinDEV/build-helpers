@@ -33,12 +33,12 @@ find_path(soundio_INCLUDE_DIR
 
 if (NOT TARGET soundio::static)
     find_library(soundio_LIBRARIES_STATIC
-            NAMES libsoundio.a
+            NAMES libsoundio.a soundio.lib
             HINTS ${soundio_ROOT_DIR} ${soundio_ROOT_DIR}/lib
     )
 
     if (soundio_LIBRARIES_STATIC)
-        add_library(soundio::static SHARED IMPORTED)
+        add_library(soundio::static STATIC IMPORTED)
         set_target_properties(soundio::static PROPERTIES
                 IMPORTED_LOCATION ${soundio_LIBRARIES_STATIC}
                 INTERFACE_INCLUDE_DIRECTORIES ${soundio_INCLUDE_DIR}
