@@ -28,6 +28,10 @@ SET(ed25519_ROOT_DIR "${LIBRARY_PATH}/ed25519/${BUILD_OUTPUT}")
 SET(Jemalloc_ROOT_DIR "${LIBRARY_PATH}/jemalloc/${BUILD_OUTPUT}")
 SET(jsoncpp_DIR "${LIBRARY_PATH}/jsoncpp/${BUILD_OUTPUT}/lib/cmake/jsoncpp/")
 SET(yaml-cpp_ROOT_DIR "${LIBRARY_PATH}/yaml-cpp/${BUILD_OUTPUT}/share/cmake/yaml-cpp/")
+SET(nice_DIR "${LIBRARY_PATH}/libnice/${BUILD_OS_TYPE}_${BUILD_OS_ARCH}/")
+SET(glib20_DIR "${LIBRARY_PATH}/glibc/${BUILD_OS_TYPE}_${BUILD_OS_ARCH}/")
+
+#glibc/linux_amd64/lib/
 list(APPEND CMAKE_MODULE_PATH "${LIBRARY_PATH}/protobuf/${BUILD_OUTPUT}/lib/cmake/")
 if(BUILD_OS_TYPE STREQUAL "win32")
 	SET(Libevent_DIR "${LIBRARY_PATH}/event/${BUILD_OUTPUT}/cmake")
@@ -38,4 +42,4 @@ SET(opus_ROOT_DIR "${LIBRARY_PATH}/opus/${BUILD_OUTPUT}")
 SET(Breakpad_ROOT_DIR "${LIBRARY_PATH}/breakpad/${BUILD_OUTPUT}")
 
 set(spdlog_DIR "${LIBRARY_PATH}/spdlog/${BUILD_OUTPUT}/lib/spdlog/cmake/")
-list(APPEND CMAKE_MODULE_PATH "${LIBRARY_PATH}/spdlog/${BUILD_OUTPUT}")
+list(APPEND CMAKE_MODULE_PATH "${LIBRARY_PATH}/spdlog/${BUILD_OUTPUT}/lib/spdlog/cmake")
