@@ -20,7 +20,7 @@ requires_rebuild "${library_path}"
 [[ $? -eq 0 ]] && exit 0
 
 cd ${library_path} || { echo "failed to enter library path"; exit 1; }
-git clone https://chromium.googlesource.com/linux-syscall-support src/third_party/lss
+git clone https://chromium.googlesource.com/linux-syscall-support src/third_party/lss || { echo "failed to clone lss"; exit 1; }
 cd .. || { echo "failed to exit library path"; exit 1; }
 
 generate_build_path "${library_path}"
@@ -35,7 +35,7 @@ check_err_exit ${library_path} "Failed to enter build directory"
 
 ../../configure --prefix=`pwd`
 check_err_exit ${library_path} "Failed to configure"
-make CXXFLAGS="-std=c++11 -I../../boringssl/include/ ${CXX_FLAGS} -static-libgcc -static-libstdc++" CFLAGS="${C_FLAGS}" ${MAKE_OPTIONS}
+make CXXFLAGS="-std=c++11 ${CXX_FLAGS} -static-libgcc -static-libstdc++" CFLAGS="${C_FLAGS}" ${MAKE_OPTIONS}
 check_err_exit ${library_path} "Failed to build"
 make install
 check_err_exit ${library_path} "Failed to install"

@@ -29,6 +29,11 @@ if [[ ${build_os_type} == "linux" ]]; then
     # define OPENSSL_VERSION_NUMBER  0x1010008fL
     #endif" > include/openssl/opensslv.h
     fi
+
+    cat ssl/test/bssl_shim.cc | grep "__STDC_FORMAT_MACROS" &> /dev/null
+    if [[ $? -ne 0 ]]; then
+        echo "`echo -e "#define __STDC_FORMAT_MACROS\n\n"``cat ssl/test/bssl_shim.cc`"
+    fi
     cd ..
 fi
 
