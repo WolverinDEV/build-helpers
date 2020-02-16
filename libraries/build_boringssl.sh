@@ -32,7 +32,7 @@ if [[ ${build_os_type} == "linux" ]]; then
 
     cat ssl/test/bssl_shim.cc | grep "__STDC_FORMAT_MACROS" &> /dev/null
     if [[ $? -ne 0 ]]; then
-        echo "`echo -e "#define __STDC_FORMAT_MACROS\n\n"``cat ssl/test/bssl_shim.cc`"
+        echo "`echo -e "#define __STDC_FORMAT_MACROS\n\n"``cat ssl/test/bssl_shim.cc`" > ssl/test/bssl_shim.cc
     fi
     cd ..
 fi
