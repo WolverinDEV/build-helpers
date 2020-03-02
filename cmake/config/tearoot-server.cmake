@@ -17,6 +17,7 @@ endif()
 
 include(tearoot-helper)
 SET(Boringssl_ROOT_DIR "${LIBRARY_PATH}/boringssl/lib/")
+SET(Crypto_ROOT_DIR "${LIBRARY_PATH}/openssl-prebuild/${BUILD_OS_TYPE}_${BUILD_OS_ARCH}/")
 SET(TomMath_ROOT_DIR "${LIBRARY_PATH}/tommath/${BUILD_OUTPUT}")
 SET(TomCrypt_ROOT_DIR "${LIBRARY_PATH}/tomcrypt/${BUILD_OUTPUT}")
 SET(CXXTerminal_ROOT_DIR "${LIBRARY_PATH}/CXXTerminal/${BUILD_OUTPUT}")
