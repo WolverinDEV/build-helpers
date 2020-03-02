@@ -15,59 +15,92 @@
 #
 #  DataPipes_FOUND             System has DataPipes, include and library dirs found
 #  DataPipes_INCLUDE_DIR       The DataPipes include directories.
-#  DataPipes_LIBRARIES_STATIC  The DataPipes libraries.
-#  DataPipes_LIBRARIES_SHARED  The DataPipes libraries.
 
 include(tearoot-helper)
 include(FindPackageHandleStandardArgs)
 
-find_path(DataPipes_ROOT_DIR
-        NAMES include/pipes/buffer.h include/pipes/pipeline.h
-        HINTS ${DataPipes_ROOT_DIR}
-)
+function(find_datapipes)
+    find_path(DataPipes_ROOT_DIR
+            NAMES include/pipes/buffer.h include/pipes/pipeline.h
+            HINTS ${DataPipes_ROOT_DIR}
+    )
 
-find_path(DataPipes_INCLUDE_DIR
-        NAMES pipes/pipeline.h pipes/buffer.h
-        HINTS ${DataPipes_ROOT_DIR}/include/
-)
+    find_path(DataPipes_INCLUDE_DIR
+            NAMES pipes/pipeline.h pipes/buffer.h
+            HINTS ${DataPipes_ROOT_DIR}/include/
+    )
 
-if (NOT TARGET DataPipes::static)
-    find_library(DataPipes_LIBRARIES_STATIC
-            NAMES DataPipes.lib libDataPipes.a
-            HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
+    if (NOT TARGET DataPipes::core::static)
+        find_library(STATIC_CORE_LIBRARY
+                NAMES DataPipes.lib libDataPipes.a
+                HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
+        )
+
+        if(STATIC_CORE_LIBRARY)
+            add_library(DataPipes::core::static STATIC IMPORTED)
+            set_target_properties(DataPipes::core::static PROPERTIES
+                    IMPORTED_LOCATION ${STATIC_CORE_LIBRARY}
+                    INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
             )
+        endif()
+    endif ()
 
-    if(DataPipes_LIBRARIES_STATIC)
-        add_library(DataPipes::static STATIC IMPORTED)
-        set_target_properties(DataPipes::static PROPERTIES
-                IMPORTED_LOCATION ${DataPipes_LIBRARIES_STATIC}
-                INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
+    if (NOT TARGET DataPipes::core::shared)
+        find_library(SHARED_CORE_LIBRARY
+                NAMES DataPipes.dll libDataPipes.so
+                HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
                 )
-    endif()
-endif ()
 
-if (NOT TARGET DataPipes::shared)
-    find_library(DataPipes_LIBRARIES_SHARED
-            NAMES DataPipes.dll libDataPipes.so
-            HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
+        if(SHARED_CORE_LIBRARY)
+            add_library(DataPipes::core::shared SHARED IMPORTED)
+            set_target_properties(DataPipes::core::shared PROPERTIES
+                    IMPORTED_LOCATION ${SHARED_CORE_LIBRARY}
+                    INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
+                    )
+        endif()
+    endif ()
+
+    if (NOT TARGET DataPipes::rtc::static)
+        find_library(STATIC_RTC_LIBRARY
+                NAMES DataPipes-RTC.lib libDataPipes-RTC.a
+                HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
+                )
+
+        if(STATIC_RTC_LIBRARY)
+            add_library(DataPipes::rtc::static STATIC IMPORTED)
+            set_target_properties(DataPipes::rtc::static PROPERTIES
+                    IMPORTED_LOCATION ${STATIC_RTC_LIBRARY}
+                    INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
             )
+        endif()
+    endif ()
 
-    if(DataPipes_LIBRARIES_SHARED)
-        add_library(DataPipes::shared SHARED IMPORTED)
-        set_target_properties(DataPipes::shared PROPERTIES
-                IMPORTED_LOCATION ${DataPipes_LIBRARIES_SHARED}
-                INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
-                )
-    endif()
-endif ()
+    if (NOT TARGET DataPipes::rtc::shared)
+        find_library(SHARED_RTC_LIBRARY
+                NAMES DataPipes-RTC.dll libDataPipes-RTC.so
+                HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
+        )
 
-find_package_handle_standard_args(DataPipes DEFAULT_MSG
-        DataPipes_INCLUDE_DIR
-)
+        if(SHARED_RTC_LIBRARY)
+            add_library(DataPipes::rtc::shared SHARED IMPORTED)
+            set_target_properties(DataPipes::rtc::shared PROPERTIES
+                    IMPORTED_LOCATION ${SHARED_RTC_LIBRARY}
+                    INTERFACE_INCLUDE_DIRECTORIES ${DataPipes_INCLUDE_DIR}
+            )
+        endif()
+    endif ()
 
-mark_as_advanced(
-        DataPipes_ROOT_DIR
-        DataPipes_INCLUDE_DIR
-        DataPipes_LIBRARIES_STATIC
-        DataPipes_LIBRARIES_SHARED
-)
+    find_package_handle_standard_args(DataPipes DEFAULT_MSG
+            DataPipes_INCLUDE_DIR
+    )
+
+    mark_as_advanced(
+            DataPipes_ROOT_DIR
+            DataPipes_INCLUDE_DIR
+            STATIC_CORE_LIBRARY
+            STATIC_RTC_LIBRARY
+            SHARED_CORE_LIBRARY
+            SHARED_RTC_LIBRARY
+    )
+endfunction()
+find_datapipes()
