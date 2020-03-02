@@ -66,6 +66,36 @@ if (NOT TARGET openssl::ssl::shared)
     endif ()
 endif ()
 
+if (NOT TARGET openssl::crypto::static)
+    find_library(CRYPTO_CRYPTO_STATIC
+            NAMES libcrypto.a
+            HINTS ${Crypto_ROOT_DIR} ${Crypto_ROOT_DIR}/lib
+    )
+
+    if (CRYPTO_CRYPTO_STATIC)
+        add_library(openssl::crypto::static STATIC IMPORTED)
+        set_target_properties(openssl::crypto::static PROPERTIES
+                IMPORTED_LOCATION ${CRYPTO_CRYPTO_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${Crypto_INCLUDE_DIR}
+        )
+    endif ()
+endif ()
+
+if (NOT TARGET openssl::ssl::static)
+    find_library(CRYPTO_SSL_STATIC
+            NAMES libssl.a
+            HINTS ${Crypto_ROOT_DIR} ${Crypto_ROOT_DIR}/lib
+    )
+
+    if (CRYPTO_SSL_STATIC)
+        add_library(openssl::ssl::static STATIC IMPORTED)
+        set_target_properties(openssl::ssl::static PROPERTIES
+                IMPORTED_LOCATION ${CRYPTO_SSL_STATIC}
+                INTERFACE_INCLUDE_DIRECTORIES ${Crypto_INCLUDE_DIR}
+        )
+    endif ()
+endif ()
+
 
 find_package_handle_standard_args(Crypto DEFAULT_MSG Crypto_INCLUDE_DIR)
 mark_as_advanced(
