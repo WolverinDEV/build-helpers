@@ -20,7 +20,7 @@ requires_rebuild "${library_path}"
 [[ $? -eq 0 ]] && exit 0
 
 cd ${library_path} || { echo "failed to enter library path"; exit 1; }
-git clone https://chromium.googlesource.com/linux-syscall-support src/third_party/lss || { echo "failed to clone lss"; exit 1; }
+git clone https://chromium.googlesource.com/linux-syscall-support src/third_party/lss
 cd .. || { echo "failed to exit library path"; exit 1; }
 
 generate_build_path "${library_path}"
