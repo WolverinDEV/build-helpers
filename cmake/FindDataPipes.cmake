@@ -32,7 +32,7 @@ function(find_datapipes)
 
     if (NOT TARGET DataPipes::core::static)
         find_library(STATIC_CORE_LIBRARY
-                NAMES DataPipes.lib libDataPipes.a
+                NAMES DataPipes-Core-Static.lib libDataPipes-Core-Static.a
                 HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
         )
 
@@ -47,7 +47,7 @@ function(find_datapipes)
 
     if (NOT TARGET DataPipes::core::shared)
         find_library(SHARED_CORE_LIBRARY
-                NAMES DataPipes.dll libDataPipes.so
+                NAMES DataPipes-Core-Shared.dll libDataPipes-Core-Shared.so
                 HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
                 )
 
@@ -62,7 +62,7 @@ function(find_datapipes)
 
     if (NOT TARGET DataPipes::rtc::static)
         find_library(STATIC_RTC_LIBRARY
-                NAMES DataPipes-RTC.lib libDataPipes-RTC.a
+                NAMES DataPipes-Rtc-Static.lib libDataPipes-Rtc-Static.a
                 HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
                 )
 
@@ -77,7 +77,7 @@ function(find_datapipes)
 
     if (NOT TARGET DataPipes::rtc::shared)
         find_library(SHARED_RTC_LIBRARY
-                NAMES DataPipes-RTC.dll libDataPipes-RTC.so
+                NAMES DataPipes-Rtc-Shared.dll libDataPipes-Rtc-Shared.so
                 HINTS ${DataPipes_ROOT_DIR} ${DataPipes_ROOT_DIR}/lib
         )
 
