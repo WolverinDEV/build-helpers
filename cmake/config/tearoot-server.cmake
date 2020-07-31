@@ -31,6 +31,7 @@ SET(jsoncpp_DIR "${LIBRARY_PATH}/jsoncpp/${BUILD_OUTPUT}/lib/cmake/jsoncpp/")
 SET(yaml-cpp_ROOT_DIR "${LIBRARY_PATH}/yaml-cpp/${BUILD_OUTPUT}/share/cmake/yaml-cpp/")
 SET(nice_DIR "${LIBRARY_PATH}/libnice/${BUILD_OS_TYPE}_${BUILD_OS_ARCH}/")
 SET(glib20_DIR "${LIBRARY_PATH}/glibc/${BUILD_OS_TYPE}_${BUILD_OS_ARCH}/")
+SET(zstd_DIR "${LIBRARY_PATH}/zstd/build/cmake/${BUILD_OUTPUT}/lib/cmake/zstd/")
 
 #glibc/linux_amd64/lib/
 list(APPEND CMAKE_MODULE_PATH "${LIBRARY_PATH}/protobuf/${BUILD_OUTPUT}/lib/cmake/")
