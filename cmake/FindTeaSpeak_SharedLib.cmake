@@ -21,34 +21,48 @@
 include(tearoot-helper)
 include(FindPackageHandleStandardArgs)
 
-find_path(TeaSpeak_SharedLib_ROOT_DIR
-        NAMES src/Definitions.h CMakeLists.txt
-        HINTS ${TeaSpeak_SharedLib_ROOT_DIR}
+find_path(TeaSpeak_SharedLib_OUT_DIR
+        NAMES include/Definitions.h
+        PATHS ${TeaSpeak_SharedLib_ROOT_DIR}/${BUILD_OUTPUT}/
 )
 
-#This NEEDS a fix!
-find_path(TeaSpeak_SharedLib_INCLUDE_DIR
-        NAMES Definitions.h
-        HINTS ${TeaSpeak_SharedLib_ROOT_DIR}/src
-)
+if(TeaSpeak_SharedLib_OUT_DIR)
+	find_library(TeaSpeak_SharedLib_LIBRARIES_STATIC
+		NAMES libTeaSpeak.a TeaSpeak.a TeaSpeak.lib
+		HINTS ${TeaSpeak_SharedLib_OUT_DIR}/lib
+	)
 
-find_library(TeaSpeak_SharedLib_LIBRARIES_STATIC
-        NAMES libTeaSpeak.a TeaSpeak.a TeaSpeak.lib
-		HINTS ${TeaSpeak_SharedLib_ROOT_DIR}/cmake-build-debug/ ${TeaSpeak_SharedLib_ROOT_DIR}/cmake-build-relwithdebinfo/ ${TeaSpeak_SharedLib_ROOT_DIR}/${BUILD_OUTPUT}/lib
-)
+	set(TeaSpeak_SharedLib_INCLUDE_DIR "${TeaSpeak_SharedLib_OUT_DIR}/include/")
+	find_package_handle_standard_args(TeaSpeak_SharedLib DEFAULT_MSG
+			TeaSpeak_SharedLib_INCLUDE_DIR
+	)
+else()
+	message(WARNING "TeaSpeak shared lib release hasn't been build. Using development path.")
 
-find_library(TeaSpeak_SharedLib_LIBRARIES_SHARED
-        NAMES TeaSpeak.dll libTeaSpeak.so TeaSpeak.so
-		HINTS ${TeaSpeak_SharedLib_ROOT_DIR}/cmake-build-debug/ ${TeaSpeak_SharedLib_ROOT_DIR}/cmake-build-relwithdebinfo/ ${TeaSpeak_SharedLib_ROOT_DIR}/${BUILD_OUTPUT}/lib
-)
+	find_path(TeaSpeak_SharedLib_ROOT_DIR
+			NAMES src/Definitions.h CMakeLists.txt
+			HINTS ${TeaSpeak_SharedLib_ROOT_DIR}
+	)
 
-find_package_handle_standard_args(TeaSpeak_SharedLib DEFAULT_MSG
-        TeaSpeak_SharedLib_INCLUDE_DIR
-)
+	#This NEEDS a fix!
+	find_path(TeaSpeak_SharedLib_INCLUDE_DIR
+			NAMES Definitions.h
+			HINTS ${TeaSpeak_SharedLib_ROOT_DIR}/src
+	)
+
+	find_library(TeaSpeak_SharedLib_LIBRARIES_STATIC
+			NAMES libTeaSpeak.a TeaSpeak.a TeaSpeak.lib
+			HINTS ${TeaSpeak_SharedLib_ROOT_DIR}/cmake-build-debug/ ${TeaSpeak_SharedLib_ROOT_DIR}/cmake-build-relwithdebinfo/
+	)
+
+
+	find_package_handle_standard_args(TeaSpeak_SharedLib DEFAULT_MSG
+			TeaSpeak_SharedLib_INCLUDE_DIR
+	)
+endif()
 
 mark_as_advanced(
         TeaSpeak_SharedLib_ROOT_DIR
         TeaSpeak_SharedLib_INCLUDE_DIR
         TeaSpeak_SharedLib_LIBRARIES_STATIC
-        TeaSpeak_SharedLib_LIBRARIES_SHARED
 )
